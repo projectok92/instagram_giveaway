@@ -17,7 +17,7 @@ const oneArrayFromAllFiles = async () => {
   const arrayWithArrays = await getPairsFromFiles();
 
   let oneBigArray = [];
-  for await (let el of arrayWithArrays){
+  for (let el of arrayWithArrays){
     oneBigArray.push(...el);
   } 
 
@@ -25,10 +25,10 @@ const oneArrayFromAllFiles = async () => {
 }
 
 const uniqueValues = async () => {
-  const wordsArray = await oneArrayFromAllFiles();
-  const uniqeNum = [... new Set(wordsArray)].length;
+  const oneBigArray = await oneArrayFromAllFiles();
+  const uniqeNum = [... new Set(oneBigArray)].length;
 
-  console.log(uniqeNum);
+  console.log('Unique: '+ uniqeNum);
 }
 
 uniqueValues();
