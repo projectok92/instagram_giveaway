@@ -1,23 +1,23 @@
 const getPairsFromFiles = async () => {
   let fileUrl;
-  let arrayWithArrays = [];
+  let arrayOfArrays = [];
 
   for (let i = 0; i < 20; i++){
     fileUrl = `./200k_words_100x100/out${i}.txt`;
 
     await fetch(fileUrl)
       .then(response => response.text())
-      .then(text => arrayWithArrays.push(text.split('\n')))
+      .then(text => arrayOfArrays.push(text.split('\n')))
   }
   
-  return arrayWithArrays;
+  return arrayOfArrays;
 }
 
 const oneArrayFromAllFiles = async () => {
-  const arrayWithArrays = await getPairsFromFiles();
+  const arrayOfArrays = await getPairsFromFiles();
 
   let oneBigArray = [];
-  for (let el of arrayWithArrays){
+  for (let el of arrayOfArrays){
     oneBigArray.push(...el);
   } 
 
@@ -32,22 +32,38 @@ const uniqueValues = async () => {
 }
 
 const existInAllFiles = async () => {
-  const arrayWithArrays = await getPairsFromFiles();
+  const arrayOfArrays = await getPairsFromFiles();
 
   let arr1;
-  let arr2;
-  let currentResult = arrayWithArrays[0];
+  let arr2 = arrayOfArrays[0];
 
-  for (let i = 1; i < 20; i++) {
-    arr1 = arrayWithArrays[i];
-    arr2 =  currentResult;
-
-    currentResult = arr1.filter(value => arr2.includes(value));
-    console.log(currentResult);
+  for (let i = 1; i < 20; i++){
+    arr1 = arrayOfArrays[i];
+    arr2 = arr1.filter(value => arr2.includes(value));
   }
 
-  console.log('Exist in all files: ' + currentResult.length);
+  console.log('Exists in all files: ' + arr2.length);
+}
+
+const existInAtLeastTen = async () => {
+  const arrayOfArrays = await getPairsFromFiles();
+  const oneBigArray = new Set([...await oneArrayFromAllFiles()]);
+
+  let values = {};
+
+  oneBigArray.forEach(el => values[el] = 0);
+  arrayOfArrays.forEach(el => (new Set([...el])).forEach(it => values[it] = values[it] + 1));
+
+  let counter = 0;
+  for (let key in values){
+    if (values[key] > 9) {
+      counter += 1;
+    }
+  }
+
+  console.log('Exists in at least ten: ' + counter);
 }
 
 uniqueValues();
 existInAllFiles();
+existInAtLeastTen();
