@@ -3,7 +3,7 @@ const getPairsFromFiles = async () => {
   let arrayOfArrays = [];
 
   for (let i = 0; i < 20; i++){
-    fileUrl = `./200k_words_100x100/out${i}.txt`;
+    fileUrl = `./2kk_words_400x400/out${i}.txt`
 
     await fetch(fileUrl)
       .then(response => response.text())
